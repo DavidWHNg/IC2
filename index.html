@@ -38,6 +38,7 @@ var stim_off = 'resources/images/GREY.png'
 // set up counterbalancing + participant condition.
 var num_random = Math.floor(Math.random() * 6) + 1;
 
+
 // MTurk code
 var turkcode = (Math.floor(Math.random()* 69696969) * 919).toString();
 
@@ -66,13 +67,14 @@ if (num_random % 3 === 0) {
   group = 1
 } else if (num_random % 2 === 0) {
   group = 2
-  stim_context = stim_broken
+  // stim_context = stim_broken
 } else {
   group = 3
 };
 
-// console.log('group ' + group);
+console.log('group ' + group);
 // console.log(cue_colour);
+console.log(num_random)
 
 jsPsych.data.addProperties({
   group: group,
@@ -126,143 +128,11 @@ var timeline_questionnaire_demographics = {
 // load stimuli (for A/B/C/D cells) into array to randomize
 
 // Set up A B C D trials
-// group 2 and 3 will see 2 lights, group 1 will see only 1 light
+// group 3 will see 2 lights, group 1 and 2 will see only 1 light (2 has hidden second light)
 var whitespace = '<p> <font color = "white"> whitespace </font> </p>' //white space line for formatting
 
-if (group > 1) {
-  var stim_cue_context_display = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
-    '<p></p>' +
-    '<img src = ' + blank + '/>' +
-    whitespace +
-    whitespace,
-    response_ends_trial: false,
-    trial_duration: 1000,
-  };
-
-  var stim_context_display = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context + '/>' +
-    '<p></p>' +
-    '<img src = ' + blank + '/>' +
-    whitespace +
-    whitespace,
-    response_ends_trial: false,
-    trial_duration: 1000,
-  };
-
-  var shock_cue_context_delay = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
-    '<p></p>' +
-    "<img src = " + shock_display + "/>" +
-    "<p> Mr X was shocked! </p>" +
-    whitespace,
-    response_ends_trial: false,
-    trial_duration: 1000,
-  };
-
-  var shock_cue_context_prompt = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
-    '<p></p>' +
-    "<img src = " + shock_display + "/>" +
-    "<p> Mr X was shocked! </p>" +
-    "<p> Press the spacebar to continue </p>",
-    choices: [32],
-    post_trial_gap: 250,
-    on_finish: function(data) {
-      trial_num++;
-      // console.log(trial_num);
-      jsPsych.data.get().addToLast({trial_num: trial_num});
-    }
-  };
-
-  var noshock_cue_context_delay = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
-    '<p></p>' +
-    '<p> Mr X was not shocked </p>' +
-    '<img src = ' + blank + '/>' +
-    whitespace,
-    response_ends_trial: false,
-    trial_duration: 1000
-  }
-
-  var noshock_cue_context_prompt = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
-    '<p></p>' +
-    '<p> Mr X was not shocked </p>' +
-    '<img src = ' + blank + '/>' +
-    '<p> Press the spacebar to continue </p>',
-    choices: [32],
-    post_trial_gap: 250,
-    on_finish: function(data) {
-      trial_num++;
-      // console.log(trial_num);
-      jsPsych.data.get().addToLast({trial_num: trial_num});
-    }
-  };
-
-  var shock_context_delay = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context + '/>' +
-    '<p></p>' +
-    "<img src = " + shock_display + "/>" +
-    "<p> Mr X was shocked! </p>" +
-    whitespace,
-    response_ends_trial: false,
-    trial_duration: 1000,
-
-  };
-
-  var shock_context_prompt = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context + '/>' +
-    '<p></p>' +
-    "<img src = " + shock_display + "/>" +
-    "<p> Mr X was shocked! </p>" +
-    "<p> Press the spacebar to continue </p>",
-    choices: [32],
-    post_trial_gap: 250,
-    on_finish: function(data) {
-      trial_num++;
-      // console.log(trial_num);
-      jsPsych.data.get().addToLast({trial_num: trial_num});
-    }
-  };
-
-  var noshock_context_delay = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context + '/>' +
-    '<p></p>' +
-    '<p> Mr X was not shocked </p>' +
-    '<img src = ' + blank + '/>' +
-    whitespace,
-    response_ends_trial: false,
-    trial_duration: 1000
-  }
-
-  var noshock_context_prompt = {
-    type: "html-keyboard-response",
-    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context + '/>' +
-    '<p></p>' +
-    '<p> Mr X was not shocked </p>' +
-    '<img src = ' + blank + '/>' +
-    '<p> Press the spacebar to continue </p>',
-    choices: [32],
-    post_trial_gap: 250,
-    on_finish: function(data) {
-      trial_num++;
-      // console.log(trial_num);
-      jsPsych.data.get().addToLast({trial_num: trial_num});
-    }
-  };
-
-} else if (group == 1) {
-  var stim_cue_context_display = {
+// 1 cue trials
+  var cueon_display = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_cue + '/>' +
     '<p></p>' +
@@ -273,7 +143,7 @@ if (group > 1) {
     trial_duration: 1000
   };
 
-  var stim_context_display = {
+  var cueoff_display = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_off + '/>' +
     '<p></p>' +
@@ -284,7 +154,7 @@ if (group > 1) {
     trial_duration: 1000,
   };
 
-  var shock_cue_context_delay = {
+  var shock_cueon_delay = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_cue + '/>' +
     '<p></p>' +
@@ -295,7 +165,7 @@ if (group > 1) {
     trial_duration: 1000,
   };
 
-  var shock_cue_context_prompt = {
+  var shock_cueon_prompt = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_cue + '/>' +
     '<p></p>' +
@@ -311,7 +181,7 @@ if (group > 1) {
     }
   };
 
-  var noshock_cue_context_delay = {
+  var noshock_cueon_delay = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_cue + '/>' +
     '<p></p>' +
@@ -322,7 +192,7 @@ if (group > 1) {
     trial_duration: 1000
   }
 
-  var noshock_cue_context_prompt = {
+  var noshock_cueon_prompt = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_cue + '/>' +
     '<p></p>' +
@@ -338,7 +208,7 @@ if (group > 1) {
     }
   };
 
-  var shock_context_delay = {
+  var shock_cueoff_delay = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_off + '/>' +
     '<p></p>' +
@@ -346,10 +216,10 @@ if (group > 1) {
     "<p> Mr X was shocked! </p>" +
     whitespace,
     response_ends_trial: false,
-    trial_duration: 1000,
+    trial_duration: 1000
   };
 
-  var shock_context_prompt = {
+  var shock_cueoff_prompt = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_off + '/>' +
     '<p></p>' +
@@ -365,7 +235,7 @@ if (group > 1) {
     }
   };
 
-  var noshock_context_delay = {
+  var noshock_cueoff_delay = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_off + '/>' +
     '<p></p>' +
@@ -376,7 +246,7 @@ if (group > 1) {
     trial_duration: 1000
   }
 
-  var noshock_context_prompt = {
+  var noshock_cueoff_prompt = {
     type: "html-keyboard-response",
     stimulus: '<img src = ' + stim_off + '/>' +
     '<p></p>' +
@@ -391,66 +261,270 @@ if (group > 1) {
       jsPsych.data.get().addToLast({trial_num: trial_num});
     }
   };
-};
+
+  // 2 cue trials
+  var cueon_contexton_display = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
+    '<p></p>' +
+    '<img src = ' + blank + '/>' +
+    whitespace +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000,
+  };
+
+  var cueoff_contexton_display = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context + '/>' +
+    '<p></p>' +
+    '<img src = ' + blank + '/>' +
+    whitespace +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000,
+  };
+
+  var cueon_contextoff_display = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_off + '/>' +
+    '<p></p>' +
+    '<img src = ' + blank + '/>' +
+    whitespace +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000,
+  };
+
+  var cueoff_contextoff_display = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_off + '/>' +
+    '<p></p>' +
+    '<img src = ' + blank + '/>' +
+    whitespace +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000,
+  };
+
+  var shock_cueon_contexton_delay = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
+    '<p></p>' +
+    "<img src = " + shock_display + "/>" +
+    "<p> Mr X was shocked! </p>" +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000,
+  };
+
+  var shock_cueon_contexton_prompt = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_cue + '/><img src = ' + stim_context +'/>' +
+    '<p></p>' +
+    "<img src = " + shock_display + "/>" +
+    "<p> Mr X was shocked! </p>" +
+    "<p> Press the spacebar to continue </p>",
+    choices: [32],
+    post_trial_gap: 250,
+    on_finish: function(data) {
+      trial_num++;
+      // console.log(trial_num);
+      jsPsych.data.get().addToLast({trial_num: trial_num});
+    }
+  };
+
+  var shock_cueoff_contexton_delay = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context +'/>' +
+    '<p></p>' +
+    "<img src = " + shock_display + "/>" +
+    "<p> Mr X was shocked! </p>" +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000,
+  };
+
+  var shock_cueoff_contexton_prompt = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_off + '/><img src = ' + stim_context +'/>' +
+    '<p></p>' +
+    "<img src = " + shock_display + "/>" +
+    "<p> Mr X was shocked! </p>" +
+    "<p> Press the spacebar to continue </p>",
+    choices: [32],
+    post_trial_gap: 250,
+    on_finish: function(data) {
+      trial_num++;
+      // console.log(trial_num);
+      jsPsych.data.get().addToLast({trial_num: trial_num});
+    }
+  };
+
+  var noshock_cueon_contextoff_delay = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_cue + '/>' + '<img src = ' + stim_off + '/>' +
+    '<p></p>' +
+    '<p> Mr X was not shocked </p>'  +
+    '<img src = ' + blank + '/>' +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000
+  }
+
+  var noshock_cueon_contextoff_prompt = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_cue + '/>' + '<img src = ' + stim_off + '/>' +
+    '<p></p>' +
+    '<p> Mr X was not shocked </p>'  +
+    '<img src = ' + blank + '/>' +
+    '<p> Press the spacebar to continue </p>',
+    choices: [32],
+    post_trial_gap: 250,
+    on_finish: function(data) {
+      trial_num++;
+      // console.log(trial_num);
+      jsPsych.data.get().addToLast({trial_num: trial_num});
+    }
+  };
+
+  var noshock_cueoff_contextoff_delay = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_off + '/>' + '<img src = ' + stim_off + '/>' +
+    '<p></p>' +
+    '<p> Mr X was not shocked </p>'  +
+    '<img src = ' + blank + '/>' +
+    whitespace,
+    response_ends_trial: false,
+    trial_duration: 1000
+  }
+
+  var noshock_cueoff_contextoff_prompt = {
+    type: "html-keyboard-response",
+    stimulus: '<img src = ' + stim_off + '/>' + '<img src = ' + stim_off + '/>' +
+    '<p></p>' +
+    '<p> Mr X was not shocked </p>'  +
+    '<img src = ' + blank + '/>' +
+    '<p> Press the spacebar to continue </p>',
+    choices: [32],
+    post_trial_gap: 250,
+    on_finish: function(data) {
+      trial_num++;
+      // console.log(trial_num);
+      jsPsych.data.get().addToLast({trial_num: trial_num});
+    }
+  };
 
 // set up training trials for A B C D cells (contingency table)
 trial_num = 0;
 
-var training_trialA = {
-  timeline: [
-    stim_cue_context_display,
-    shock_cue_context_delay,
-    shock_cue_context_prompt
-  ],
-  data: {
-    phase: 'training',
-    trialtype: 'A',
-  },
-};
+  if (group < 3) {
+    var training_trialA = {
+      timeline: [
+        cueon_display,
+        shock_cueon_delay,
+        shock_cueon_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'A',
+      },
+    };
 
-var training_trialB = {
-  timeline: [
-    stim_cue_context_display,
-    noshock_cue_context_delay,
-    noshock_cue_context_prompt
-  ],
-  data: {
-    phase: 'training',
-    trialtype: 'B',
-  },
-};
+    var training_trialB = {
+      timeline: [
+        cueon_display,
+        noshock_cueon_delay,
+        noshock_cueon_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'B',
+      },
+    };
 
-var training_trialC = {
-  timeline: [
-    stim_context_display,
-    shock_context_delay,
-    shock_context_prompt
-  ],
-  data: {
-    phase: 'training',
-    trialtype: 'C',
-  },
-};
+    var training_trialC = {
+      timeline: [
+        cueoff_display,
+        shock_cueoff_delay,
+        shock_cueoff_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'C',
+      },
+    };
 
-var training_trialD = {
-  timeline: [
-    stim_context_display,
-    noshock_context_delay,
-    noshock_context_prompt
-  ],
-  data: {
-    phase: 'training',
-    trialtype: 'D',
-  },
-};
+    var training_trialD = {
+      timeline: [
+        cueoff_display,
+        noshock_cueoff_delay,
+        noshock_cueoff_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'D',
+      },
+    }
+  } else if (group == 3) {
+    var training_trialA = {
+      timeline: [
+        cueon_contexton_display,
+        shock_cueon_contexton_delay,
+        shock_cueon_contexton_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'A',
+      },
+    };
+
+    var training_trialB = {
+      timeline: [
+        cueon_contextoff_display,
+        noshock_cueon_contextoff_delay,
+        noshock_cueon_contextoff_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'B',
+      },
+    };
+
+    var training_trialC = {
+      timeline: [
+        cueoff_contexton_display,
+        shock_cueoff_contexton_delay,
+        shock_cueoff_contexton_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'C',
+      },
+    };
+
+    var training_trialD = {
+      timeline: [
+        cueoff_contextoff_display,
+        noshock_cueoff_contextoff_delay,
+        noshock_cueoff_contextoff_prompt
+      ],
+      data: {
+        phase: 'training',
+        trialtype: 'D',
+      },
+    }
+  };
+
+
 
 // input distribution of training trials per block (18/6/6/2)
-var num_training_trialA = 18;
-var num_training_trialB = 6;
-var num_training_trialC = 6;
-var num_training_trialD = 2;
+var num_training_trialA = 1;
+var num_training_trialB = 1;
+var num_training_trialC = 1;
+var num_training_trialD = 1;
 
-var num_training_trialblocks = 2;
+var num_training_trialblocks = 1;
 
 // set up training trial order for all blocks
 var timeline_training_trials = [];
@@ -575,7 +649,7 @@ var test_frequency_cueoff = {
   "<p> How many times out of 100 do you predict Mr X will be shocked? </p>",
   post_trial_gap: 250,
   data: {
-    trialtype: "fr_cueon_conon"
+    trialtype: "fr_cueon"
   },
 };
 
@@ -593,7 +667,7 @@ var test_frequency_cueoff_contexton = {
   "<p> How many times out of 100 do you predict Mr X will be shocked? </p>",
   post_trial_gap: 250,
   data: {
-    trialtype: "fr_cueoff_conon"
+    trialtype: "fr_cueoff"
   },
 };
     var test_frequency_cueon_contextoff = {
@@ -632,24 +706,6 @@ var test_frequency_cueoff_contexton = {
       },
     };
 
-var test_frequency_brokenlightison = {
-  type: "html-slider-response",
-  stimulus: '<img src = ' + stim_context + '> </img>',
-  labels: [
-    "<p> Never </p>",
-    "<p> Half the time </p>",
-    "<p> All the time </p>",
-  ],
-  butten_label: "Continue",
-  require_movement: true,
-  prompt: "<p> In this experiment it was unclear whether the <b>broken</b> light was on or off. </p>" +
-  "<p> From your observations, how often did you think the broken light was <b>ON</b> </p>",
-  post_trial_gap: 250,
-  data: {
-    trialtype: "fr_bl",
-  },
-};
-
 var test_openend_causalrelationship = {
   type: "survey-text",
   questions: [
@@ -665,7 +721,8 @@ var test_openend_causalrelationship = {
 var test_openend_othercauses = {
   type: "survey-text",
   questions: [
-    {prompt: "In this experiment, did you consider any causes of shock other than the coloured lights presented? If so, please describe them. If you did not consider any other causes of shock, please type 'no' and click continue.", rows: 10, columns: 80},
+    {prompt: "<p>In this experiment, did you consider any causes of shock other than the coloured lights presented? If so, please describe them. </p>" + 
+    "<p>If you did not consider any other causes of shock, please type 'no' and click 'Continue'.</p>", rows: 10, columns: 80}, 
 ],
   post_trial_gap: 250,
   data: {
@@ -673,6 +730,49 @@ var test_openend_othercauses = {
     phase: "test"
   }
 };
+
+  if (group < 3) {
+      var test_openend_cueofftrials = {
+        type: "survey-text",
+        questions: [
+          { prompt: "On some trials Mr X observed, the RED light was off but a shock still occurred.</p>" +
+          "<p>What did you think caused the shock?.</p>", rows: 10, columns: 80 },
+        ],
+        post_trial_gap: 250,
+        data: {
+          trialtype: "oe_ac",
+          phase: "test"
+        }
+      };
+    } else if (group == 3) {
+      if (cue_colour == 'blue') {
+        var test_openend_cueofftrials = {
+          type: "survey-text",
+          questions: [
+            { prompt: "<p>On some trials Mr X observed, the BLUE light was off but a shock still occurred.</p>" +
+            "<p>What did you think caused the shock?.</p>", rows: 10, columns: 80 },
+          ],
+          post_trial_gap: 250,
+          data: {
+            trialtype: "oe_ac",
+            phase: "test"
+          }
+        };
+      } else if (cue_colour == 'red') {
+        var test_openend_cueofftrials = {
+          type: "survey-text",
+          questions: [
+            { prompt: "<p>On some trials Mr X observed the RED light was off but a shock still occurred.</p>" +
+            "<p>What did you think caused the shock?.</p>", rows: 10, columns: 80 },
+          ],
+          post_trial_gap: 250,
+          data: {
+            trialtype: "oe_ac",
+            phase: "test"
+          }
+        };
+      }
+    };
 
 // loop if open ended question not answered properly (minimum string length = 2 for "no")
 // var test_openend_othercauses_loop = {
@@ -750,16 +850,13 @@ if (group == 1) {
   };
 };
 
-if (group == 2) {
-test_frequency_block.timeline = test_frequency_block.timeline.concat(test_frequency_brokenlightison)
-};
-
 var timeline_test_trials = {
   timeline: [
     test_causalratings_block,
     test_frequency_block,
     test_openend_causalrelationship,
     test_openend_othercauses,
+    test_openend_cueofftrials
   ],
 };
 
@@ -1142,15 +1239,15 @@ var timeline_experiment_end = {
 // put it all together
 var timeline = [];
 
-timeline = timeline.concat(timeline_welcome);
+// timeline = timeline.concat(timeline_welcome);
 // timeline = timeline.concat(fullscreen_prompt);
-timeline = timeline.concat(timeline_questionnaire_demographics);
-timeline = timeline.concat(timeline_training_instructions);
-timeline = timeline.concat(timeline_instruction_check);
-timeline = timeline.concat(timeline_training_trials);
-timeline = timeline.concat(timeline_test_instructions);
+// timeline = timeline.concat(timeline_questionnaire_demographics);
+// timeline = timeline.concat(timeline_training_instructions);
+// timeline = timeline.concat(timeline_instruction_check);
+// timeline = timeline.concat(timeline_training_trials);
+// timeline = timeline.concat(timeline_test_instructions);
 timeline = timeline.concat(timeline_test_trials);
-timeline = timeline.concat(timeline_experiment_end);
+// timeline = timeline.concat(timeline_experiment_end);
 
 // load experiment
 jatos.onLoad(function () {
