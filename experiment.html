@@ -6,6 +6,7 @@
   <script src="resources/jsPsych/plugins/jspsych-html-keyboard-response.js"></script>
   <script src="resources/jsPsych/plugins/jspsych-html-button-response.js"></script>
   <script src="resources/jsPsych/welcome_SONA.js"></script>
+  <script src="resources/jsPsych/plugins/jspsych-external-html.js"></script>
   <script src="resources/jsPsych/plugins/jspsych-html-slider-response.js"></script>
   <script src="resources/jsPsych/plugins/jspsych-image-keyboard-response.js"></script>
   <script src="resources/jsPsych/plugins/jspsych-image-button-response.js"></script>
@@ -16,6 +17,7 @@
   <script src="resources/jsPsych/plugins/jspsych-fullscreen.js"></script>
   <script src="jatos.js"></script>
   <link href="resources/jsPsych/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  <link href="resources/jsPsych/css/ethics.css" rel="stylesheet" type="text/css"></link>
 </head>
 <style>
 </style>
@@ -23,7 +25,28 @@
   <div id="welcome"></div>
 </body>
 <script>
-  
+
+
+// load in consent and debrief forms 
+var consent = {
+    type: "external-html",
+    url: "consent.html",
+    cont_btn: "consented",
+    check_fn: function () {
+        jsPsych.data.addProperties(
+            {
+                wants_copy: document.getElementById("copy").checked,
+            }
+        );
+        return true;
+    }
+};
+
+var debrief = {
+    type: "external-html",
+    url: "debrief.html",
+    cont_btn: "been_debriefed",
+};
 
 // load in images
 var stim_list = [
@@ -78,43 +101,6 @@ if (num_random % 3 === 0) {
 // console.log(cue_colour);
 
 
-    /* function to start the jsPsych experiment */
-
-      function startExperiment() {
-
-        jatos.onLoad(function () {
-
-          // ---------- subject info ----------
-          var sona_id = jatos.urlQueryParameters.id;// jsPsych.data.getURLVariable("id");
-          var completion_url = "https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=1296&credit_token=5dece0015dce49e3aff8c7d968517dbd&survey_code=" + sona_id;
-
-          // add properties to each trial in the jsPsych data
-          jsPsych.data.addProperties({
-            sona_id: sona_id, // turkcode: turkcode,
-            group: group,
-            cb: cb,
-            cue_colour: cue_colour,
-            con_colour: con_colour,
-            turkcode: turkcode,
-          });
-
-          jsPsych.init({
-            timeline: timeline,
-            show_progress_bar: false,
-            preload_images: [stim_list, shock_display, blank, stim_broken, stim_off],
-            on_finish: function () {
-              var result = jsPsych.data.get().json();
-              jatos.submitResultData(result, function () {
-                document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
-                  finish_msg +
-                  '</p></div></div>')
-              });
-            },
-          });
-        });
-      };
-
-
 var questionnaire_demographics = {
   type: "survey-html-form",
   preamble: "<p> Before we begin, we would like to ask some demographic questions <p>",
@@ -154,6 +140,7 @@ var timeline_questionnaire_demographics = {
     questionnaire_demographics_loop
   ]
 };
+
 
 // load stimuli (for A/B/C/D cells) into array to randomize
 
@@ -1493,18 +1480,47 @@ var timeline_experiment_end = {
 // put it all together
 var timeline = [];
 
-timeline = timeline.concat(timeline_welcome);
-timeline = timeline.concat(timeline_questionnaire_demographics);
-timeline = timeline.concat(timeline_training_instructions);
-timeline = timeline.concat(timeline_instruction_check);
-timeline = timeline.concat(timeline_training_trials);
-timeline = timeline.concat(timeline_test_instructions);
-timeline = timeline.concat(timeline_test_trials);
-timeline = timeline.concat(timeline_experiment_end);
+timeline = timeline.concat(consent);
+// timeline = timeline.concat(timeline_welcome);
+// timeline = timeline.concat(timeline_questionnaire_demographics);
+// timeline = timeline.concat(timeline_training_instructions);
+// timeline = timeline.concat(timeline_instruction_check);
+// timeline = timeline.concat(timeline_training_trials);
+// timeline = timeline.concat(timeline_test_instructions);
+// timeline = timeline.concat(timeline_test_trials);
+// timeline = timeline.concat(timeline_experiment_end);
+timeline = timeline.concat (debrief);
 
-// run welcome first
-welcome.run();
+jatos.onLoad(function () {
 
+// ---------- subject info ----------
+var sona_id = jatos.urlQueryParameters.id;// jsPsych.data.getURLVariable("id");
+var completion_url = "https://unsw-psy.sona-systems.com/webstudy_credit.aspx?experiment_id=1296&credit_token=5dece0015dce49e3aff8c7d968517dbd&survey_code=" + sona_id;
+
+// add properties to each trial in the jsPsych data
+jsPsych.data.addProperties({
+  sona_id: sona_id, // turkcode: turkcode,
+  group: group,
+  cb: cb,
+  cue_colour: cue_colour,
+  con_colour: con_colour,
+  turkcode: turkcode,
+});
+
+jsPsych.init({
+  timeline: timeline,
+  show_progress_bar: false,
+  preload_images: [stim_list, shock_display, blank, stim_broken, stim_off],
+  on_finish: function () {
+    var result = jsPsych.data.get().json();
+    jatos.submitResultData(result, function () {
+      document.write('<div id="endscreen" class="endscreen" style="width:1000px"><div class="endscreen" style="text-align:center; border:0px solid; padding:10px; font-size:120%; width:800px; float:right"><p><br><br><br>' +
+        finish_msg +
+        '</p></div></div>')
+    });
+  },
+});
+});
 
 </script>
 </html>
